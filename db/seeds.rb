@@ -1,26 +1,25 @@
 # Data initialization here
 require_relative '../config/environment.rb'
-
-require "json"
+require 'faker'
 
 User.destroy_all
 Post.destroy_all
 
-json_data = File.read("./db/mock_data.json")
-json_to_hash = JSON.parse(json_data)
-json_to_hash.map{|data|
-    # Creates User object
+20.times do
     user = User.create
-    user.first_name = data["first_name"]
-    user.last_name = data["last_name"]
-    user.age = data["age"]
-    user.location = data["city"] + ", " + data["state"]
-    user.date_of_birth = data["date_of_birth"]
-    user.mobile = data["mobile"]
-    user.email = data["email"]
-    
-    # Creates Post object
+    user.first_name = Faker::Name.first_name
+    user.last_name = Faker::Name.last_name
+    user.age = Faker::Number.between(from: 1, to: 100)
+    user.location = Faker::Address.city + ", " + Faker::Address.state
+    user.date_of_birth = Faker::Date.between(from: '1921-01-01', to: '2021-01-01')
+    user.mobile = Faker::PhoneNumber.phone_number
+    user.email = Faker::Internet.email
+    user.save
+end
+
+100.times do
     post = Post.create
-    post.title = data["title"]
-    post.message = data["message"]
-}
+    post.title = Faker::Lorem.sentence(word_count: 2,supplemental: true, random_words_to_add: 10)
+    post.message = Faker::Lorem.paragraph(sentence_count: 1, supplemental: true, random_sentences_to_add: 10)
+    post.save
+end
