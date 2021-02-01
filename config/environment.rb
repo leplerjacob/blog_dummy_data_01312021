@@ -1,6 +1,7 @@
 # Basic database setup
 
 require 'bundler/setup'
+require 'sinatra/activerecord'
 Bundler.require(:default, "development")
 
 ActiveRecord::Base.establish_connection(
